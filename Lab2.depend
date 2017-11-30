@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1512072108 source:c:\users\user\desktop\eadslabs2-master\main.cpp
+	<iostream>
+	"BiRing.cpp"
+
+1512071470 source:c:\users\user\desktop\eadslabs2-master\biring.cpp
+	"BiRing.h"
+
+1512072080 c:\users\user\desktop\eadslabs2-master\biring.h
+	<iostream>
+
+1512071470 c:\users\user\desktop\eadslabs2-master\biring.cpp
+	"BiRing.h"
+
