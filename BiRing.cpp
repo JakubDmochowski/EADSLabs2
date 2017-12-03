@@ -1,3 +1,4 @@
+#pragma once
 #include "BiRing.h"
 
 template<typename Key, typename Info>
@@ -60,29 +61,29 @@ typename BiRing<Key,Info>::const_iterator BiRing<Key, Info>::cend() const {
 }
 
 template<typename Key, typename Info>
-void BiRing<Key, Info>::push_front(Key key, Info info) {
+void BiRing<Key, Info>::push_back(Key key, Info info) {
     add(key, info, --end());
 }
 
 template<typename Key, typename Info>
-void BiRing<Key, Info>::push_back(Key key, Info info) {
+void BiRing<Key, Info>::push_front(Key key, Info info) {
     add(key, info, begin());
 }
 
 template<typename Key, typename Info>
-void BiRing<Key, Info>::pop_front() {
+void BiRing<Key, Info>::pop_back() {
     remove(--end());
 }
 
 template<typename Key, typename Info>
-void BiRing<Key, Info>::pop_back() {
+void BiRing<Key, Info>::pop_front() {
     remove(begin());
 }
 
 template<typename Key, typename Info>
-typename BiRing<Key, Info>::iterator BiRing<Key, Info>::find_key(Info info, int pos) const {
+typename BiRing<Key, Info>::iterator BiRing<Key, Info>::find_key(Key key, int pos) const {
     for(BiRing<Key, Info>::iterator i = begin(); i != end(); ++i) {
-        if(i.info() == info && !--pos) {
+        if(i.key() == key && !--pos) {
             return i;
         }
     }
@@ -90,9 +91,9 @@ typename BiRing<Key, Info>::iterator BiRing<Key, Info>::find_key(Info info, int 
 }
 
 template<typename Key, typename Info>
-typename BiRing<Key,Info>::iterator BiRing<Key, Info>::find_info(Key key, int pos) const {
+typename BiRing<Key,Info>::iterator BiRing<Key, Info>::find_info(Info info, int pos) const {
     for(BiRing<Key, Info>::iterator i = begin(); i != end(); ++i) {
-        if(i.key() == key && !--pos) {
+        if(i.info() == info && !--pos) {
             return i;
         }
     }
@@ -144,3 +145,24 @@ typename BiRing<Key,Info>::iterator BiRing<Key, Info>::remove(const iterator& x)
     return end();
 }
 
+template<typename Key, typename Info>
+typename BiRing<Key,Info>::iterator BiRing<Key, Info>::iterator::add(Key key, Info info) {
+    Node* tmp = new Node();
+    tmp->info = info;
+    tmp->key = key;
+    tmp->next = node->next;
+    tmp->prev = node;
+    node->next->prev = tmp;
+    node->next = tmp;
+    return iterator(tmp);
+}
+
+template<typename Key, typename Info>
+typename BiRing<Key,Info>::iterator BiRing<Key, Info>::iterator::remove() {
+    this->node->next->prev = this->node->prev;
+    this->node->prev->next = this->node->next;
+    iterator ret;
+    ret.node = this->node->next;
+    delete this->node;
+    return ret;
+}

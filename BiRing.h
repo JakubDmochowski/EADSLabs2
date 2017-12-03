@@ -21,8 +21,8 @@ class BiRing {  ///ALLOW DUPLICATES
         void push_back(Key, Info);
         void pop_front();
         void pop_back();
-        iterator find_key(Info info, int pos = 1) const;
-        iterator find_info(Key key, int pos = 1) const;
+        iterator find_key(Key key, int pos = 1) const;
+        iterator find_info(Info info, int pos = 1) const;
         iterator add(Key key, Info info, const iterator& after); //what we add and after what in arguments
         iterator add(Key key, Info info, Key after, int pos = 1);
         iterator remove(Key key, int pos = 1); //returns iterator to next element after removed one , do nothing when invalid value
@@ -42,10 +42,12 @@ class BiRing {  ///ALLOW DUPLICATES
                 iterator& operator++(int)    { node = node->next; return *this; };
                 iterator& operator--()       { node = node->prev; return *this; };
                 iterator& operator--(int)    { node = node->prev; return *this; }
-                iterator& operator+=(unsigned int n) { while(n--) {++(*this);} };
-                iterator& operator-=(unsigned int n) { while(n--) {--(*this);} };
+                iterator& operator+=(unsigned int n) { while(n--) { ++(*this);} return *this; };
+                iterator& operator-=(unsigned int n) { while(n--) { --(*this);} return *this; };
                 bool operator==(const iterator& x) const { return node == x.node; };
                 bool operator!=(const iterator& x) const { return node != x.node; };
+                iterator add(Key key, Info info); //what we add and after what in arguments
+                iterator remove(); //what we add and after what in arguments
                 const Key& key() const { return node->key; };
                 Info& info() const { return node->info; };
         };
@@ -60,8 +62,8 @@ class BiRing {  ///ALLOW DUPLICATES
                 const_iterator& operator++(int) { node = node->next; return *this; };
                 const_iterator& operator--() { node = node->prev; return *this; };
                 const_iterator& operator--(int) { node = node->prev; return *this; }
-                const_iterator& operator+=(unsigned int n) { for(;n--;) {++(*this);} };
-                const_iterator& operator-=(unsigned int n) { for(;n--;) {--(*this);} };
+                const_iterator& operator+=(unsigned int n) { for(;n--;) {++(*this);} return *this; };
+                const_iterator& operator-=(unsigned int n) { for(;n--;) {--(*this);} return *this; };
                 bool operator==(const const_iterator& x) const { return node == x.node; };
                 bool operator!=(const const_iterator& x) const { return node != x.node; };
                 const Key& key() const { return node->key; };
@@ -78,10 +80,14 @@ class BiRing {  ///ALLOW DUPLICATES
         };
 };
 
+#include "BiRing.cpp"
+
 template<typename Key, typename Info>
 std::ostream& operator<<(std::ostream& os, const BiRing<Key, Info>& x) {
+    os << "[";
     for(typename BiRing<Key, Info>::iterator i = x.begin(); i != x.end(); ++i) {
-        os << "Key: " << i.key() << " Info: " << i.info() << std::endl;
+        os << "(" << i.key() << "," << i.info() << ")";
     }
+    os << "]";
     return os;
 }
