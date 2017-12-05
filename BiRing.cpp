@@ -159,6 +159,7 @@ typename BiRing<Key,Info>::iterator BiRing<Key, Info>::iterator::add(Key key, In
 
 template<typename Key, typename Info>
 typename BiRing<Key,Info>::iterator BiRing<Key, Info>::iterator::remove() {
+    if(this->node->prev == this->node) return iterator(this->node);
     this->node->next->prev = this->node->prev;
     this->node->prev->next = this->node->next;
     iterator ret;
